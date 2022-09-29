@@ -23,6 +23,7 @@
     "fastify-jwt": "^4.2.0",
     "fastify-swagger": "^5.2.0",
     "fastify-zod": "^1.2.0",
+    "http-status-codes": "^2.2.0",
     "zod": "^3.19.1",
     "zod-to-json-schema": "^3.18.1"
   },
