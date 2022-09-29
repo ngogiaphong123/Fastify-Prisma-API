@@ -1,10 +1,13 @@
+import swagger from 'fastify-swagger'
 import fastifyJwt from 'fastify-jwt';
 import Fastify, { FastifyReply, FastifyRequest } from "fastify";
+import { withRefResolver } from 'fastify-zod';
 import { userRoutes } from "./modules/user/user.route";
 import { userSchemas } from "./modules/user/user.schema";
 import { StatusCodes } from 'http-status-codes';
 import { ProductSchemas } from './modules/product/product.schema';
 import { productRoutes } from './modules/product/product.route';
+import {version} from '../package.json'
 export const server = Fastify();
 declare module "fastify" {
     export interface FastifyInstance {
@@ -38,6 +41,18 @@ for(const schema of [...userSchemas,...ProductSchemas]) {
 server.get('/healthCheck', async (request : FastifyRequest,reply : FastifyReply) => {
     return {status : 'ok'}
 })
+server.register(swagger,withRefResolver({
+    routePrefix: '/docs',
+    exposeRoute : true,
+    staticCSP : true,
+    openapi : {
+        info : {
+            title : 'Fastify API',
+            description : 'Fastify, Zod, Swagger, JWT, Postgres, Prisma',
+            version
+        }
+    }
+}))
 server.register(userRoutes , {prefix : '/api/users'})
 server.register(productRoutes , {prefix : '/api/products'})
 server.listen({port : 3000 , host : "0.0.0.0"}, (err , address) => {
