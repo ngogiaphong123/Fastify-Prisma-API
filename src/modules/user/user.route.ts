@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { createUserHandler, userLoginHandler } from "./user.controller";
+import { createUserHandler, userLoginHandler , getUsersHandler} from "./user.controller";
 import { $ref } from "./user.schema";
 
 export async function userRoutes(server: FastifyInstance) {
@@ -7,7 +7,7 @@ export async function userRoutes(server: FastifyInstance) {
         schema: {
             body: $ref('createUserSchema'),
             response: {
-                201: $ref('createUserResponseSchema')
+                201: $ref('userResponseSchema')
             }
         }
     }, createUserHandler)
@@ -19,5 +19,11 @@ export async function userRoutes(server: FastifyInstance) {
             }
         }
     }, userLoginHandler)
-    
+    server.get('/',{
+        schema : {
+            response : {
+                200 : $ref('userListSchema')
+            }
+        }
+    },getUsersHandler)
 }

@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
-import { server } from '../app';
-import { verifyPassword } from '../utils/hash';
+import { server } from '../../app';
+import { verifyPassword } from '../../utils/hash';
 import { CreateUserInput, LoginUserInput } from './user.schema';
-import { createUser, findUserByEmail } from './user.service';
+import { createUser, findUserByEmail, findUsers } from './user.service';
 
 export const createUserHandler = async (request: FastifyRequest<{
     Body: CreateUserInput
@@ -35,6 +35,17 @@ export const userLoginHandler = async (request: FastifyRequest<{
         return { accessToken: server.jwt.sign(rest) }
     }
     catch (err: any) {
+        console.log(err)
+        return reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err)
+    }
+}
+
+export const getUsersHandler = async (request : FastifyRequest , reply : FastifyReply) => {
+    try {
+        const userList = await findUsers();
+        return reply.status(StatusCodes.OK).send(userList)
+    }
+    catch(err : any) {
         console.log(err)
         return reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err)
     }
