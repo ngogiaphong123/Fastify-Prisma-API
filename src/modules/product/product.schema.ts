@@ -25,10 +25,22 @@ const productResponseSchema = z.object({
     ...productInput,
     ...productGeneratedByPrisma
 })
+const updateProductSchema = z.object({
+    ...productInput,
+})
+const updateProductParam = z.object({
+    productId : z.number({
+        required_error: 'Product id is required',
+    })
+})
 const productListSchema = z.array(productResponseSchema)
 export type CreateProductInput = z.infer<typeof createProductSchema>
+export type updateProductInput = z.infer<typeof updateProductSchema>
+export type updateProductParam = z.infer<typeof updateProductParam>
 export const {schemas : ProductSchemas , $ref } = buildJsonSchemas({
     createProductSchema,
     productResponseSchema,
-    productListSchema
+    productListSchema,
+    updateProductSchema,
+    updateProductParam
 },{$id : 'product'})

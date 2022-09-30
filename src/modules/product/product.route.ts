@@ -1,4 +1,4 @@
-import { createProductHandler , getProductHandler } from './product.controller';
+import { createProductHandler , getProductHandler ,updateProductHandler} from './product.controller'; 
 import { FastifyInstance } from 'fastify';
 import { $ref } from './product.schema';
 
@@ -20,4 +20,14 @@ export async function productRoutes(server: FastifyInstance) {
             }
         }
     }, getProductHandler)
+    server.patch('/:productId' , {
+        preHandler : server.authenticate,
+        schema : {
+            body : $ref('updateProductSchema'),
+            params : $ref('updateProductParam')
+            // response : {
+            //     200 : $ref('productResponseSchema')
+            // },
+        }
+    },updateProductHandler)
 }

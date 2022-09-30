@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { FastifyRequest , FastifyReply} from "fastify"
-import { CreateProductInput } from "./product.schema"
-import { createProduct, getProducts } from "./product.service";
+import { CreateProductInput, updateProductInput, updateProductParam } from "./product.schema"
+import { createProduct, getProducts, updateProduct } from "./product.service";
 export const createProductHandler = async (request : FastifyRequest<{
     Body : CreateProductInput
 }>, reply : FastifyReply) => {
@@ -19,4 +19,13 @@ export const getProductHandler = async (request : FastifyRequest, reply : Fastif
     const user = request.user;
     const products = await getProducts(user.id);
     return reply.status(StatusCodes.OK).send(products)
+}
+
+export const updateProductHandler = async (request : FastifyRequest<{
+    Body : updateProductInput,
+    Params : updateProductParam
+}> , reply : FastifyReply) => {
+    const {params,body} = request;
+    const updatedProduct = await updateProduct(body,params.productId);
+    return reply.status(StatusCodes.OK).send(updatedProduct)
 }
