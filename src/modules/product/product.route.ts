@@ -24,10 +24,10 @@ export async function productRoutes(server: FastifyInstance) {
         preHandler : server.authenticate,
         schema : {
             body : $ref('updateProductSchema'),
-            params : $ref('updateProductParam')
-            // response : {
-            //     200 : $ref('productResponseSchema')
-            // },
+            params : $ref('updateProductParam'),
+            response : {
+                200 : $ref('productResponseSchema')
+            },
         }
     },updateProductHandler)
 }
